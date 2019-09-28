@@ -125,8 +125,29 @@ class MapViewController: UIViewController {
                     self?.route(origin: origin, destination: destination, travelMode: .bicycle)
                 } else if travelMode == .bicycle {
                     self?.route(origin: origin, destination: destination, travelMode: .pedestrian)
-                } else if travelMode == .pedestrian {
-                    self?.route(origin: origin, destination: destination, travelMode: .truck)
+                } else {
+                    
+                    let formatter = DateComponentsFormatter()
+                    formatter.zeroFormattingBehavior = .pad
+                    formatter.allowedUnits = [.hour, .minute, .second]
+                    formatter.unitsStyle = .abbreviated
+                    let seconds = 3492
+                    let formattedTime = formatter.string(from: TimeInterval(seconds))
+
+                    self?.trainTimeLabel.text = formattedTime
+                    let measurementFormatter = MeasurementFormatter()
+                    measurementFormatter.numberFormatter.maximumFractionDigits = 3
+                    
+                    let km = 120.0
+                    let measurement = Measurement(value: km * 75, unit: UnitMass.grams)
+                    measurementFormatter.numberFormatter.maximumFractionDigits = 1
+                    self?.trainCo2Label.text = measurementFormatter.string(from: measurement)
+                    
+                    let numberFormatter = NumberFormatter()
+                    numberFormatter.maximumFractionDigits = 1
+                    let kmString = numberFormatter.string(from: NSNumber(value: km))!
+                    self?.trainPointsLabel.text = "\(kmString) 🐧"
+
                 }
             }
         }
