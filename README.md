@@ -1,4 +1,4 @@
-# pingo
-hack Zurich 19 pingo app
+# pengo
+hack Zurich 19 pengo app
 
 save the penguins ;)
