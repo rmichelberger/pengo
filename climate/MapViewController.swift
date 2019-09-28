@@ -11,50 +11,6 @@ import TomTomOnlineSDKRouting
 import TomTomOnlineSDKMaps
 import MapKit
 
-
-class FullRoute: TTFullRoute {
-    let coordinates: [NSValue]
-    let sum: Summary
-
-    init(coordinates: [NSValue], sum: Summary) {
-        self.coordinates = coordinates
-        self.sum = sum
-    }
-    
-    override func coordinatesCount() -> UInt {
-        return UInt(coordinates.count)
-    }
-    
-    override func coordinatesData() -> [NSValue] {
-        return coordinates
-    }
-        
-    override var summary: TTSummary {
-        return self.sum
-    }
-    
-}
-
-class Summary: TTSummary {
-    
-    let length: Int
-    let travelTime: Int
-    
-    override var lengthInMetersValue: Int {
-        return length
-    }
-    
-    override var travelTimeInSecondsValue: Int {
-        return travelTime
-    }
-    
-    init(length: Int, travelTime: Int) {
-        self.length = length
-        self.travelTime = travelTime
-    }
-}
-
-
 class MapViewController: UIViewController {
     
     @IBOutlet private weak var mapView: TTMapView!
@@ -98,20 +54,24 @@ class MapViewController: UIViewController {
         
         fromTextField.delegate = self
         toTextField.delegate = self
-        
-        let alpha: CGFloat = 0.86
+      
+        let alpha: CGFloat = 0.9
         bikeStackView.addBackground(color: UIColor.oceanBlue.withAlphaComponent(alpha))
         carStackView.addBackground(color: UIColor.pomegranate.withAlphaComponent(alpha))
         trainStackView.addBackground(color: UIColor.carrot.withAlphaComponent(alpha))
         walkStackView.addBackground(color: UIColor.greenSea.withAlphaComponent(alpha))
         
 //        let sum = Summary(length: 4, travelTime: 4000)
-//        let origin = CLLocationCoordinate2D(latitude: CLLocationDegrees(47.376888), longitude: CLLocationDegrees(8.541694))
+        let origin = CLLocationCoordinate2D(latitude: CLLocationDegrees(47.376888), longitude: CLLocationDegrees(8.541694))
 //        let destination = CLLocationCoordinate2D(latitude: CLLocationDegrees(46.947975), longitude: CLLocationDegrees(7.447447))
 //
 //        let fullRoute = FullRoute(coordinates: [NSValue(mkCoordinate: origin), NSValue(mkCoordinate: destination)], sum: sum)
 //
 //        show(routes: [fullRoute], for: .none)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.mapView.center(on: origin, withZoom: 10)
+        }
         
     }
     
@@ -122,18 +82,20 @@ class MapViewController: UIViewController {
                 self?.show(routes: routeResult.routes, for: travelMode)
                 
                 if travelMode == .car {
-                    self?.route(origin: origin, destination: destination, travelMode: .bicycle)
-                } else if travelMode == .bicycle {
-                    self?.route(origin: origin, destination: destination, travelMode: .pedestrian)
-                } else {
+                    let origin1 = CLLocationCoordinate2D(latitude: CLLocationDegrees(47.310489), longitude: CLLocationDegrees(8.056924))
+                    let destination1 = CLLocationCoordinate2D(latitude: CLLocationDegrees(47.092157), longitude: CLLocationDegrees(7.625899))
+                    
+                    var coordinates = [origin, origin1, destination1, destination]
+                    let polyline = TTPolyline(coordinates: &coordinates, count: 4, opacity: 1, width: 8, color: .carrot)
+                    self?.mapView.annotationManager.add(polyline)
                     
                     let formatter = DateComponentsFormatter()
                     formatter.zeroFormattingBehavior = .pad
-                    formatter.allowedUnits = [.hour, .minute, .second]
+                    formatter.allowedUnits = [.hour, .minute]
                     formatter.unitsStyle = .abbreviated
                     let seconds = 3492
                     let formattedTime = formatter.string(from: TimeInterval(seconds))
-
+                    
                     self?.trainTimeLabel.text = formattedTime
                     let measurementFormatter = MeasurementFormatter()
                     measurementFormatter.numberFormatter.maximumFractionDigits = 3
@@ -148,6 +110,10 @@ class MapViewController: UIViewController {
                     let kmString = numberFormatter.string(from: NSNumber(value: km))!
                     self?.trainPointsLabel.text = "\(kmString) 🐧"
 
+                    
+                    self?.route(origin: origin, destination: destination, travelMode: .bicycle)
+                } else if travelMode == .bicycle {
+                    self?.route(origin: origin, destination: destination, travelMode: .pedestrian)
                 }
             }
         }
@@ -163,7 +129,7 @@ class MapViewController: UIViewController {
                 let seconds = planedRoute.summary.travelTimeInSecondsValue
                 let formatter = DateComponentsFormatter()
                 formatter.zeroFormattingBehavior = .pad
-                formatter.allowedUnits = [.hour, .minute, .second]
+                formatter.allowedUnits = [.hour, .minute]
                 formatter.unitsStyle = .abbreviated
                 let formattedTime = formatter.string(from: TimeInterval(seconds))
                 
@@ -171,14 +137,14 @@ class MapViewController: UIViewController {
                 //                let distance = MeasurementFormatter().string(from: distanceInMeters)
                 
                 let numberFormatter = NumberFormatter()
-                numberFormatter.maximumFractionDigits = 1
+                numberFormatter.maximumFractionDigits = 0
                 let km = Double(planedRoute.summary.lengthInMetersValue) / 1000.0
                 
                 
                 switch travelMode {
                 case .bicycle:
                     fillColor = .oceanBlue
-                    outlineColor = .white
+                    outlineColor = .oceanBlue
                     bikeTimeLabel.text = formattedTime
                     bikeCo2Label.text = MassFormatter().string(fromValue: 0, unit: .gram)
                     let kmString = numberFormatter.string(from: NSNumber(value: km * 2))!
@@ -186,7 +152,7 @@ class MapViewController: UIViewController {
                     
                 case .pedestrian:
                     fillColor = .greenSea
-                    outlineColor = .white
+                    outlineColor = .greenSea
                     walkTimeLabel.text = formattedTime
                     walkCo2Label.text = MassFormatter().string(fromValue: 0, unit: .gram)
                     let kmString = numberFormatter.string(from: NSNumber(value: km * 3))!
@@ -194,7 +160,7 @@ class MapViewController: UIViewController {
 
                 case .car:
                     fillColor = .pomegranate
-                    outlineColor = .white
+                    outlineColor = .pomegranate
                     carTimeLabel.text = formattedTime
                     let formatter = MeasurementFormatter()
                     formatter.numberFormatter.maximumFractionDigits = 3
@@ -205,7 +171,7 @@ class MapViewController: UIViewController {
                     
                 default:
                     fillColor = .carrot
-                    outlineColor = .white
+                    outlineColor = .carrot
                     trainTimeLabel.text = formattedTime
                     let formatter = MeasurementFormatter()
                     formatter.numberFormatter.maximumFractionDigits = 3
@@ -248,8 +214,8 @@ class MapViewController: UIViewController {
         mapView.routeManager.bring(toFrontRoute: activeRoute!)
         
         let insets = UIEdgeInsets(
-            top: 200, left: 30,
-            bottom: 20, right: 30)
+            top: 80, left: 30,
+            bottom: 120, right: 30)
         mapView.contentInset = insets
         mapView.routeManager.showAllRoutesOverview()
         activityIndicator.stopAnimating()
@@ -309,10 +275,3 @@ extension MapViewController: UITextFieldDelegate {
     
     
 }
-
-//extension MapViewController: TTRouteResponseDelegate {
-//
-//    func route(_: TTRoute, completedWith result: TTRouteResult) {
-//          }
-//
-//}

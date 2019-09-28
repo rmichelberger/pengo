@@ -19,6 +19,12 @@ class ProfileViewController: UIViewController {
     @IBOutlet private weak var bikeButton: UIButton!
     @IBOutlet private weak var walkButton: UIButton!
     @IBOutlet private weak var totalButton: UIButton!
+    
+    @IBOutlet private weak var bikeStackView: UIStackView!
+    @IBOutlet private weak var totalStackView: UIStackView!
+    @IBOutlet private weak var walkStackView: UIStackView!
+    @IBOutlet private weak var trainStackView: UIStackView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,24 +34,28 @@ class ProfileViewController: UIViewController {
         let points = Points.shared
         show(points: points)
         
-        walkButton.tintColor = .greenSea
-        trainButton.tintColor = .carrot
-        bikeButton.tintColor = .oceanBlue
-        totalButton.tintColor = .black
+//        walkButton.tintColor = .greenSea
+//        trainButton.tintColor = .carrot
+//        bikeButton.tintColor = .oceanBlue
+//        totalButton.tintColor = .black
+//
+//        walkLabel.textColor = .greenSea
+//        trainLabel.textColor = .carrot
+//        bikeLabel.textColor = .oceanBlue
+//        totalLabel.textColor = .black
         
-        walkLabel.textColor = .greenSea
-        trainLabel.textColor = .carrot
-        bikeLabel.textColor = .oceanBlue
-        totalLabel.textColor = .black
+        let alpha: CGFloat = 0.9
+        bikeStackView.addBackground(color: UIColor.oceanBlue.withAlphaComponent(alpha))
+        totalStackView.addBackground(color: UIColor.pomegranate.withAlphaComponent(alpha))
+        trainStackView.addBackground(color: UIColor.carrot.withAlphaComponent(alpha))
+        walkStackView.addBackground(color: UIColor.greenSea.withAlphaComponent(alpha))
+
         
         title = "Profile"
         
-        let rightBartButtonIterm = UIBarButtonItem(barButtonSystemItem: .action
-            , target: self, action: #selector(share))
-        navigationItem.rightBarButtonItem = rightBartButtonIterm
     }
     
-    @objc func share(){
+    @IBAction func share() {
         let text = "I have saved 168.4kg CO2 and collected \(Points.shared.totalPoints) 🐧!\nWhat about you?\n\n#climateChange #impact #getItDone #hackzurich #saveThePenguines #pingo\n\n🌳🌱"
         
         // set up activity view controller

@@ -13,6 +13,8 @@ extension UIStackView {
         let subView = UIView(frame: bounds)
         subView.backgroundColor = color
         subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        subView.layer.cornerRadius = 4
+        subView.clipsToBounds = true
         insertSubview(subView, at: 0)
     }
 }
@@ -47,7 +49,7 @@ extension UIColor {
     }
     
     class var oceanBlue: UIColor {
-        return UIColor(hex: 0x1D7B9D)
+        return UIColor(hex: 0x2c91ff)
     }
     
     class var belizeHole: UIColor {
@@ -55,11 +57,11 @@ extension UIColor {
     }
     
     class var carrot: UIColor {
-        return UIColor(hex: 0xe67e22)
+        return UIColor(hex: 0xffbd29)
     }
     
     class var greenSea: UIColor {
-        return UIColor(hex: 0x16a085)
+        return UIColor(hex: 0x39c109)
     }
     
     class var wisteria: UIColor {
@@ -71,7 +73,7 @@ extension UIColor {
     }
     
     class var pomegranate: UIColor {
-        return UIColor(hex: 0xc0392b)
+        return UIColor(hex: 0xff3434)
     }
     
     class var alizarin: UIColor {
