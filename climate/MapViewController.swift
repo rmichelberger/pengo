@@ -149,7 +149,10 @@ class MapViewController: UIViewController {
                 //                let distanceInMeters = Measurement(value: Double(planedRoute.summary.lengthInMetersValue), unit: UnitLength.meters)
                 //                let distance = MeasurementFormatter().string(from: distanceInMeters)
                 
+                let numberFormatter = NumberFormatter()
+                numberFormatter.maximumFractionDigits = 1
                 let km = Double(planedRoute.summary.lengthInMetersValue) / 1000.0
+                
                 
                 switch travelMode {
                 case .bicycle:
@@ -157,15 +160,17 @@ class MapViewController: UIViewController {
                     outlineColor = .white
                     bikeTimeLabel.text = formattedTime
                     bikeCo2Label.text = MassFormatter().string(fromValue: 0, unit: .gram)
-                    bikePointsLabel.text = "\(km * 2) 🐧"
+                    let kmString = numberFormatter.string(from: NSNumber(value: km * 2))!
+                    bikePointsLabel.text = "\(kmString) 🐧"
                     
                 case .pedestrian:
                     fillColor = .greenSea
                     outlineColor = .white
                     walkTimeLabel.text = formattedTime
                     walkCo2Label.text = MassFormatter().string(fromValue: 0, unit: .gram)
-                    walkPointsLabel.text = "\(km * 3) 🐧"
-                    
+                    let kmString = numberFormatter.string(from: NSNumber(value: km * 3))!
+                    walkPointsLabel.text = "\(kmString) 🐧"
+
                 case .car:
                     fillColor = .pomegranate
                     outlineColor = .white
@@ -173,6 +178,7 @@ class MapViewController: UIViewController {
                     let formatter = MeasurementFormatter()
                     formatter.numberFormatter.maximumFractionDigits = 3
                     let measurement = Measurement(value: km * 120.1, unit: UnitMass.grams)
+                    formatter.numberFormatter.maximumFractionDigits = 1
                     carCo2Label.text = formatter.string(from: measurement)
                     carPointsLabel.text = "0 🐧"
                     
@@ -183,9 +189,11 @@ class MapViewController: UIViewController {
                     let formatter = MeasurementFormatter()
                     formatter.numberFormatter.maximumFractionDigits = 3
                     let measurement = Measurement(value: km * 75, unit: UnitMass.grams)
+                    formatter.numberFormatter.maximumFractionDigits = 1
                     trainCo2Label.text = formatter.string(from: measurement)
-                    trainPointsLabel.text = "\(km) 🐧"
-                    
+                    let kmString = numberFormatter.string(from: NSNumber(value: km))!
+                    trainPointsLabel.text = "\(kmString) 🐧"
+
                 }
                 
                 let routeStyle = TTMapRouteStyleBuilder().withWidth(1).withFill(fillColor).withOutlineColor(outlineColor).build()
