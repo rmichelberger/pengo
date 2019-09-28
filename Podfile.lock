@@ -1,0 +1,25 @@
+PODS:
+  - TomTomOnlineSDKMaps (2.4.188):
+    - TomTomOnlineUtils (= 2.4.188)
+  - TomTomOnlineSDKRouting (2.4.188):
+    - TomTomOnlineUtils (= 2.4.188)
+  - TomTomOnlineUtils (2.4.188)
+
+DEPENDENCIES:
+  - TomTomOnlineSDKMaps
+  - TomTomOnlineSDKRouting
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - TomTomOnlineSDKMaps
+    - TomTomOnlineSDKRouting
+    - TomTomOnlineUtils
+
+SPEC CHECKSUMS:
+  TomTomOnlineSDKMaps: aa0898eaa423c9410cc747d8554cda041b4759ec
+  TomTomOnlineSDKRouting: e2022926a773263e856a60346af4732cc66013f5
+  TomTomOnlineUtils: e887670437b9d383c2a73d63e0e1f8ead2d4a9ca
+
+PODFILE CHECKSUM: 43dc0d69066ff90d6148d72af6d7b5a5e3b69d3b
+
+COCOAPODS: 1.7.3
