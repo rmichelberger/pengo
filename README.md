@@ -1,5 +1,5 @@
-# pengo
-hack Zurich 19 pengo app
+# PenGo
+hack Zurich 19 PenGo app
 
-save the 🐧 !
+SaveThe🐧 !
 😀
