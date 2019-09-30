@@ -27,6 +27,6 @@ CHF 50.- discount from your car insurance, if you reach 1000 🐧
 70% discount for a surprise destination, if you reach 500 🐧
 """, logo: UIImage(named: "sbb"))
     static let bikeDiscount = Discount(image: UIImage(named: "zurivelo"), text: """
-30 minutes free bike usage in every months, if you reach 200 🐧
+30 minutes free Züri Velo usage in every months, if you reach 200 🐧
 """, logo: UIImage(named: "zh"))
 }
